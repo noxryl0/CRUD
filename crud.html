@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD de Usuários - Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Formulário */
+        .form-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .form-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Botões */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+            transform: translateY(-2px);
+        }
+
+        /* Tabela */
+        .table-section {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* Busca */
+        .search-section {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        /* Mensagens */
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Estatísticas */
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 CRUD de Usuários</h1>
+
+        <!-- Mensagem de feedback -->
+        <div id="message" class="message"></div>
+
+        <!-- Estatísticas -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalUsers">0</div>
+                <div class="stat-label">Total de Usuários</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeUsers">0</div>
+                <div class="stat-label">Usuários Ativos</div>
+            </div>
+        </div>
+
+        <!-- Formulário de Cadastro/Edição -->
+        <div class="form-section">
+            <div class="form-title" id="formTitle">➕ Novo Usuário</div>
+            <form id="userForm">
+                <input type="hidden" id="userId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" id="nome" placeholder="Digite o nome completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" placeholder="Digite o email" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Telefone</label>
+                        <input type="tel" id="telefone" placeholder="(00) 00000-0000">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="status">
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Endereço</label>
+                    <input type="text" id="endereco" placeholder="Digite o endereço">
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary" id="saveBtn">💾 Salvar</button>
+                    <button type="button" class="btn btn-info" id="cancelBtn">❌ Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Busca -->
+        <div class="search-section">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar por nome ou email...">
+            <select id="filterStatus" class="search-input">
+                <option value="todos">Todos os status</option>
+                <option value="ativo">Ativos</option>
+                <option value="inativo">Inativos</option>
+            </select>
+        </div>
+
+        <!-- Tabela de Usuários -->
+        <div class="table-section">
+            <table id="userTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <!-- Os dados serão inseridos aqui via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação para Delete -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmar Exclusão</h3>
+            </div>
+            <p>Tem certeza que deseja excluir o usuário <strong id="deleteUserName"></strong>?</p>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal()">Cancelar</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados mockados para demonstração
+        let users = [
+            { 
+                id: 1, 
+                nome: "João Silva", 
+                email: "joao@email.com", 
+                telefone: "(11) 99999-9999",
+                status: "ativo",
+                endereco: "Rua A, 123"
+            },
+            { 
+                id: 2, 
+                nome: "Maria Santos", 
+                email: "maria@email.com", 
+                telefone: "(11) 88888-8888",
+                status: "ativo",
+                endereco: "Rua B, 456"
+            },
+            { 
+                id: 3, 
+                nome: "Pedro Oliveira", 
+                email: "pedro@email.com", 
+                telefone: "(11) 77777-7777",
+                status: "inativo",
+                endereco: "Rua C, 789"
+            }
+        ];
+        
+        let nextId = 4;
+        let currentDeleteId = null;
+        let editMode = false;
+
+        // Elementos DOM
+        const userForm = document.getElementById('userForm');
+        const userTableBody = document.getElementById('userTableBody');
+        const searchInput = document.getElementById('searchInput');
+        const filterStatus = document.getElementById('filterStatus');
+        const messageDiv = document.getElementById('message');
+        const totalUsersSpan = document.getElementById('totalUsers');
+        const activeUsersSpan = document.getElementById('activeUsers');
+        const saveBtn = document.getElementById('saveBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const formTitle = document.getElementById('formTitle');
+
+        // Função para mostrar mensagem
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            setTimeout(() => {
+                messageDiv.className = 'message';
+            }, 3000);
+        }
+
+        // Função para atualizar estatísticas
+        function updateStats() {
+            totalUsersSpan.textContent = users.length;
+            const activeCount = users.filter(u => u.status === 'ativo').length;
+            activeUsersSpan.textContent = activeCount;
+        }
+
+        // Função para renderizar tabela
+        function renderTable() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const statusFilter = filterStatus.value;
+            
+            const filteredUsers = users.filter(user => {
+                const matchesSearch = user.nome.toLowerCase().includes(searchTerm) || 
+                                    user.email.toLowerCase().includes(searchTerm);
+                const matchesStatus = statusFilter === 'todos' || user.status === statusFilter;
+                return matchesSearch && matchesStatus;
+            });
+            
+            if (filteredUsers.length === 0) {
+                userTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Nenhum usuário encontrado</td></tr>';
+                return;
+            }
+            
+            userTableBody.innerHTML = filteredUsers.map(user => `
+                <tr>
+                    <td>${user.id}</td>
+                    <td><strong>${user.nome}</strong></td>
+                    <td>${user.email}</td>
+                    <td>${user.telefone || '-'}</td>
+                    <td>
+                        <span style="padding: 4px 8px; border-radius: 4px; font-size: 12px; 
+                             background: ${user.status === 'ativo' ? '#d4edda' : '#f8d7da'};
+                             color: ${user.status === 'ativo' ? '#155724' : '#721c24'}">
+                            ${user.status === 'ativo' ? '✅ Ativo' : '❌ Inativo'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-warning" onclick="editUser(${user.id})">✏️ Editar</button>
+                            <button class="btn btn-sm btn-danger" onclick="confirmDelete(${user.id})">🗑️ Excluir</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            
+            updateStats();
+        }
+
+        // Função para salvar usuário
+        function saveUser(event) {
+            event.preventDefault();
+            
+            const userId = document.getElementById('userId').value;
+            const nome = document.getElementById('nome').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const telefone = document.getElementById('telefone').value;
+            const status = document.getElementById('status').value;
+            const endereco = document.getElementById('endereco').value;
+            
+            if (!nome || !email) {
+                showMessage('Por favor, preencha nome e email', 'error');
+                return;
+            }
+            
+            // Validação de email único
+            const emailExists = users.some(u => u.email === email && u.id != userId);
+            if (emailExists) {
+                showMessage('Este email já está cadastrado', 'error');
+                return;
+            }
+            
+            if (userId) {
+                // Editar usuário existente
+                const index = users.findIndex(u => u.id == userId);
+                if (index !== -1) {
+                    users[index] = { ...users[index], nome, email, telefone, status, endereco };
+                    showMessage('Usuário atualizado com sucesso!', 'success');
+                    editMode = false;
+                    formTitle.innerHTML = '➕ Novo Usuário';
+                }
+            } else {
+                // Criar novo usuário
+                const newUser = {
+                    id: nextId++,
+                    nome,
+                    email,
+                    telefone,
+                    status,
+                    endereco
+                };
+                users.push(newUser);
+                showMessage('Usuário criado com sucesso!', 'success');
+            }
+            
+            resetForm();
+            renderTable();
+        }
+        
+        // Função para editar usuário
+        function editUser(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                document.getElementById('userId').value = user.id;
+                document.getElementById('nome').value = user.nome;
+                document.getElementById('email').value = user.email;
+                document.getElementById('telefone').value = user.telefone || '';
+                document.getElementById('status').value = user.status;
+                document.getElementById('endereco').value = user.endereco || '';
+                formTitle.innerHTML = '✏️ Editar Usuário';
+                editMode = true;
+                
+                // Scroll para o formulário
+                document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // Função para confirmar exclusão
+        function confirmDelete(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                currentDeleteId = id;
+                document.getElementById('deleteUserName').textContent = user.nome;
+                document.getElementById('deleteModal').style.display = 'flex';
+            }
+        }
+        
+        // Função para executar exclusão
+        function deleteUser() {
+            if (currentDeleteId) {
+                users = users.filter(u => u.id !== currentDeleteId);
+                showMessage('Usuário excluído com sucesso!', 'success');
+                renderTable();
+                closeModal();
+                
+                // Se estiver editando o usuário que foi excluído, resetar formulário
+                if (editMode && document.getElementById('userId').value == currentDeleteId) {
+                    resetForm();
+                }
+            }
+        }
+        
+        // Função para resetar formulário
+        function resetForm() {
+            userForm.reset();
+            document.getElementById('userId').value = '';
+            document.getElementById('status').value = 'ativo';
+            formTitle.innerHTML = '➕ Novo Usuário';
+            editMode = false;
+        }
+        
+        // Função para fechar modal
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            currentDeleteId = null;
+        }
+        
+        // Event listeners
+        userForm.addEventListener('submit', saveUser);
+        searchInput.addEventListener('input', renderTable);
+        filterStatus.addEventListener('change', renderTable);
+        cancelBtn.addEventListener('click', resetForm);
+        document.getElementById('confirmDeleteBtn').addEventListener('click', deleteUser);
+        
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('deleteModal');
+            if (event.target === modal) {
+              
